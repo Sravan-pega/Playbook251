@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import {
   Input,
-  FieldValueList,
-  Text,
   withConfiguration
 } from '@pega/cosmos-react-core';
 
 import type { PConnFieldProps } from '../shared/PConnProps';
 import '../shared/create-nonce';
 
-import StyledPegaExtensionsMaskedWithEyeInputWrapper from './styles';
+import StyledPegaFieldMaskedWithEyeInputWrapper from './styles';
 
 // Eye icon component
 const EyeIcon = () => (
@@ -46,8 +44,7 @@ const EyeOffIcon = () => (
 );
 
 // interface for props
-interface PegaExtensionsMaskedWithEyeInputProps extends PConnFieldProps {
-  variant?: any;
+interface PegaFieldMaskedWithEyeInputProps extends PConnFieldProps {
   defaultMasked?: boolean;
 }
 
@@ -56,19 +53,17 @@ interface StateProps {
   value: string;
 }
 
-function PegaExtensionsMaskedWithEyeInput(props: PegaExtensionsMaskedWithEyeInputProps) {
+function PegaFieldMaskedWithEyeInput(props: PegaFieldMaskedWithEyeInputProps) {
   const {
     getPConnect,
     value,
     placeholder,
     disabled = false,
-    displayMode,
     readOnly = false,
     required = false,
     label,
     hideLabel = false,
     testId,
-    variant = 'inline',
     defaultMasked = true
   } = props;
 
@@ -97,7 +92,7 @@ function PegaExtensionsMaskedWithEyeInput(props: PegaExtensionsMaskedWithEyeInpu
   };
 
   return (
-    <StyledPegaExtensionsMaskedWithEyeInputWrapper>
+    <StyledPegaFieldMaskedWithEyeInputWrapper>
       <div className="masked-input-container">
         <Input
           type={isTextMasked ? 'password' : 'text'}
@@ -126,8 +121,8 @@ function PegaExtensionsMaskedWithEyeInput(props: PegaExtensionsMaskedWithEyeInpu
           </span>
         </button>
       </div>
-    </StyledPegaExtensionsMaskedWithEyeInputWrapper>
+    </StyledPegaFieldMaskedWithEyeInputWrapper>
   );
 }
 
-export default withConfiguration(PegaExtensionsMaskedWithEyeInput);
+export default withConfiguration(PegaFieldMaskedWithEyeInput);

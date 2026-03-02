@@ -1,7 +1,7 @@
 // individual style, comment out above, and uncomment here and add styles
 import styled, { css } from 'styled-components';
 
-const StyledPegaExtensionsMaskedWithEyeInputWrapper = styled.div(() => {
+const StyledPegaFieldMaskedWithEyeInputWrapper = styled.div(() => {
   return css`
     margin: 0px 0;
 
@@ -77,4 +77,4 @@ const StyledPegaExtensionsMaskedWithEyeInputWrapper = styled.div(() => {
   `;
 });
 
-export default StyledPegaExtensionsMaskedWithEyeInputWrapper;
+export default StyledPegaFieldMaskedWithEyeInputWrapper;
