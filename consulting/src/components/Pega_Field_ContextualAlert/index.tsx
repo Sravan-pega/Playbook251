@@ -9,8 +9,22 @@ type AlertType = 'urgent' | 'info' | 'warning' | 'success';
 
 // interface for props
 interface PegaFieldContextualAlertProps extends PConnFieldProps {
+  /**
+   * Controls the visual style, icon, and color scheme of the alert.
+   *
+   * - `urgent` — Red. Use for errors or actions that require immediate attention.
+   * - `info` — Blue. Use for neutral informational messages.
+   * - `warning` — Amber. Use for non-blocking cautions or advisories.
+   * - `success` — Green. Use to confirm a completed action.
+   */
   type: AlertType;
+  /** Short headline displayed in bold at the top of the alert. */
   title: string;
+  /**
+   * Body text for the alert. Supports plain text or a sanitized HTML string.
+   * HTML tags such as `<a>`, `<ul>`, `<li>`, `<strong>` are rendered safely.
+   * `<script>` tags and inline event handlers are stripped automatically.
+   */
   message: string;
 }
 

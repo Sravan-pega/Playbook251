@@ -1,0 +1,81 @@
+{
+  "name": "Pega_Field_Video",
+  "label": "Video",
+  "description": "Displays a video player that loads its source from a Pega data page.",
+  "organization": "Pega",
+  "version": "0.0.1",
+  "library": "Field",
+  "componentKey": "Pega_Field_Video",
+  "type": "Widget",
+  "subtype": ["PAGE", "CASE"],
+  "subtypeLabel": "PAGE and CASE",
+  "icon": "OneColumnPage.svg",
+  "properties": [
+    {
+      "name": "datapage",
+      "label": "Data Page",
+      "format": "TEXT",
+      "description": "Name of the Pega data page that returns the video source URL."
+    },
+    {
+      "name": "datapageparams",
+      "label": "Data Page Parameters",
+      "format": "TEXT",
+      "description": "Comma-separated key:value parameters passed to the data page, e.g. videoId:myVideo"
+    },
+    {
+      "name": "width",
+      "label": "Width",
+      "format": "TEXT",
+      "defaultValue": "100%"
+    },
+    {
+      "name": "height",
+      "label": "Height",
+      "format": "TEXT",
+      "defaultValue": "auto"
+    },
+    {
+      "name": "autoplay",
+      "label": "Autoplay",
+      "format": "BOOLEAN",
+      "defaultValue": false
+    },
+    {
+      "name": "muted",
+      "label": "Muted",
+      "format": "BOOLEAN",
+      "defaultValue": false
+    },
+    {
+      "name": "loop",
+      "label": "Loop",
+      "format": "BOOLEAN",
+      "defaultValue": false
+    },
+    {
+      "name": "isBase64",
+      "label": "Source is Base64",
+      "format": "BOOLEAN",
+      "defaultValue": false,
+      "description": "Enable when the data page returns the video as a Base64-encoded string instead of a URL."
+    },
+    {
+      "name": "videoSource",
+      "label": "Video Source",
+      "format": "TEXT",
+      "description": "Direct video source (URL or Base64 string). When provided, skips data-page fetching. Useful for Storybook/testing."
+    },
+    {
+      "label": "Conditions",
+      "format": "GROUP",
+      "properties": [
+        {
+          "name": "visibility",
+          "label": "Visibility",
+          "format": "VISIBILITY"
+        }
+      ]
+    }
+  ]
+}

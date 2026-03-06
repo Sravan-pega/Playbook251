@@ -11,21 +11,72 @@ const meta: Meta<typeof PegaFieldContextualAlert> = {
   excludeStories: /.*Data$/,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+**Contextual Alert** displays an inline, role-based notification banner inside a Pega Constellation form or page.
+
+It supports four severity levels — each with a distinct icon, color, and semantic meaning — and accepts either plain text or sanitized HTML as its message body.
+
+### Business use case
+This component is used to display a message based on user operations or as a static display — for example, confirming a submitted action, warning before a destructive step, or surfacing guidance relevant to the current form context.
+
+### Why a custom component?
+This component exists outside of the Pega out-of-the-box (OOTB) alert components for two reasons:
+
+- **Distinct visual style** — it provides tighter control over layout, iconography, and color, aligning with the application's design language rather than the default Pega theme.
+- **Avoiding confusion with system messages** — OOTB alerts are also used for system-generated notifications (validation errors, server messages). Using a separate custom component keeps user-facing contextual messages visually distinct and prevents them from being mistaken for system feedback.
+
+### When to use
+| Type | Color | Use for |
+|---|---|---|
+| \`urgent\` | 🔴 Red | Errors, required actions, blocking issues |
+| \`info\` | 🔵 Blue | Neutral tips, guidance, background context |
+| \`warning\` | 🟡 Amber | Non-blocking cautions, advisories |
+| \`success\` | 🟢 Green | Confirmation of a completed action |
+
+### HTML message support
+Pass an HTML string to \`message\` to render rich content (links, lists, bold text).
+\`<script>\` tags and inline event handlers are stripped before rendering.
+
+### Accessibility
+The alert container has \`role="alert"\` and \`aria-live="polite"\` so screen readers announce it on mount.
+        `.trim(),
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
     type: {
       control: 'select',
       options: ['urgent', 'info', 'warning', 'success'],
-      description: 'The alert type which controls icon and color',
+      description: 'Controls the icon, color, and semantic meaning of the alert.',
+      table: {
+        type: { summary: "'urgent' | 'info' | 'warning' | 'success'" },
+        defaultValue: { summary: 'info' },
+      },
     },
     title: {
       control: 'text',
-      description: 'Title text displayed in the alert header',
+      description: 'Short headline displayed in bold at the top of the alert.',
+      table: {
+        type: { summary: 'string' },
+      },
     },
     message: {
       control: 'text',
-      description: 'Message body — supports plain text or HTML',
+      description: 'Body text. Accepts plain text or a sanitized HTML string (e.g. links, lists).',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    testId: {
+      control: 'text',
+      description: 'Value applied to the `data-testid` attribute for automated testing.',
+      table: {
+        type: { summary: 'string' },
+        category: 'Testing',
+      },
     },
   },
 };
@@ -46,6 +97,22 @@ const basePConnect = () => ({
 });
 
 export const Default: Story = {
+  name: 'Default (Info)',
+  parameters: {
+    docs: {
+      description: {
+        story: 'The default state using the `info` type. A good starting point when you need a neutral, non-urgent message.',
+      },
+      source: {
+        code: `<PegaFieldContextualAlert
+  getPConnect={getPConnect}
+  type="info"
+  title="Information"
+  message="Here is some helpful context for this section."
+/>`,
+      },
+    },
+  },
   args: {
     type: configProps.type as any,
     title: configProps.title,
@@ -58,6 +125,22 @@ export const Default: Story = {
 };
 
 export const Urgent: Story = {
+  name: 'Urgent',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Use `urgent` for errors or actions that block the user. The red icon and color draw immediate attention.',
+      },
+      source: {
+        code: `<PegaFieldContextualAlert
+  getPConnect={getPConnect}
+  type="urgent"
+  title="Action Required"
+  message="This is a critical alert. Please take immediate action."
+/>`,
+      },
+    },
+  },
   args: {
     type: 'urgent',
     title: 'Action Required',
@@ -70,6 +153,22 @@ export const Urgent: Story = {
 };
 
 export const Info: Story = {
+  name: 'Info',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Use `info` for neutral tips, guidance, or background context that does not require action.',
+      },
+      source: {
+        code: `<PegaFieldContextualAlert
+  getPConnect={getPConnect}
+  type="info"
+  title="Did You Know?"
+  message="This is an informational message with helpful context."
+/>`,
+      },
+    },
+  },
   args: {
     type: 'info',
     title: 'Did You Know?',
@@ -82,6 +181,22 @@ export const Info: Story = {
 };
 
 export const Warning: Story = {
+  name: 'Warning',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Use `warning` for non-blocking cautions — the user can proceed but should be aware of a potential issue.',
+      },
+      source: {
+        code: `<PegaFieldContextualAlert
+  getPConnect={getPConnect}
+  type="warning"
+  title="Please Note"
+  message="This action may have unintended consequences."
+/>`,
+      },
+    },
+  },
   args: {
     type: 'warning',
     title: 'Please Note',
@@ -94,6 +209,22 @@ export const Warning: Story = {
 };
 
 export const Success: Story = {
+  name: 'Success',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Use `success` to confirm a completed action. Display this after a form submission or save operation.',
+      },
+      source: {
+        code: `<PegaFieldContextualAlert
+  getPConnect={getPConnect}
+  type="success"
+  title="All Done!"
+  message="Your changes have been saved successfully."
+/>`,
+      },
+    },
+  },
   args: {
     type: 'success',
     title: 'All Done!',
@@ -106,6 +237,23 @@ export const Success: Story = {
 };
 
 export const WithHtmlMessage: Story = {
+  name: 'HTML Message',
+  parameters: {
+    docs: {
+      description: {
+        story: `Pass an HTML string to \`message\` to render rich content such as links and lists.
+\`<script>\` tags and inline event handlers are stripped automatically before rendering.`,
+      },
+      source: {
+        code: `<PegaFieldContextualAlert
+  getPConnect={getPConnect}
+  type="info"
+  title="Rich Content"
+  message='Visit our <a href="#">help center</a> for more details.<ul><li>Step one</li><li>Step two</li></ul>'
+/>`,
+      },
+    },
+  },
   args: {
     type: 'info',
     title: 'Rich Content',
