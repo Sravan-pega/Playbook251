@@ -12,24 +12,78 @@ const meta: Meta<typeof PegaFieldCreditcard> = {
   excludeStories: /.*Data$/,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+**Credit Card** is a specialised input field for collecting and validating credit card numbers inside a Pega Constellation form.
+
+As the user types, the component automatically identifies the card network, applies the correct formatting pattern, and validates the number in real time using the Luhn algorithm — giving immediate visual feedback before the form is ever submitted.
+
+### Business use case
+The primary purpose of this component is to validate the credit card number entered by the user. It identifies the type of credit card (Visa, Mastercard, American Express, Discover, Diners Club, JCB) and validates the number as prescribed for that network. For each supported card type, the number is formatted according to its standard grouping — for example, 4-4-4-4 digits for most cards and 4-6-5 digits for American Express.
+
+### Why a custom component?
+This component is required for two reasons:
+
+- **Visual distinction from a plain text field** — a standard Pega text field gives no indication that a card number is expected. This component shows the detected card network logo alongside the input, making the purpose of the field immediately clear to the user.
+- **Real-time validation instead of on-submit** — the default Pega validation cycle runs on form submission. This component runs the Luhn check on every keystroke, surfacing errors instantly with a red border rather than waiting until the user tries to submit. This reduces failed submissions and improves the overall form experience.
+
+### Supported card networks
+| Network | Pattern | Format |
+|---|---|---|
+| Visa | Starts with \`4\` | 4-4-4-4 |
+| Mastercard | Starts with \`51–55\` or \`2221–2720\` | 4-4-4-4 |
+| American Express | Starts with \`34\` or \`37\` | 4-6-5 |
+| Discover | Starts with \`6011\`, \`622\`, \`64\`, or \`65\` | 4-4-4-4 |
+| Diners Club | Starts with \`300–305\`, \`36\`, or \`38\` | 4-6-4 |
+| JCB | Starts with \`35\` | 4-4-4-4 |
+
+### Validation
+Card numbers are validated using the **Luhn algorithm**. A green border confirms a structurally valid number; a red border indicates an invalid one. The raw digits (no spaces) are written back to the Pega property so downstream processing always receives a clean value.
+        `.trim(),
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
     placeholder: {
       control: 'text',
-      description: 'Placeholder text for the input field',
+      description: 'Placeholder text shown inside the input before the user types.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Enter credit card number' },
+      },
     },
     showCardLogo: {
       control: 'boolean',
-      description: 'Whether to show the detected card logo',
+      description: 'When `true`, displays the detected card network logo inside the input field.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
     },
     formatNumber: {
       control: 'boolean',
-      description: 'Whether to format the card number with spaces',
+      description: 'When `true`, automatically inserts spaces between digit groups as the user types (e.g. `4111 1111 1111 1111`).',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
     },
     value: {
       control: 'text',
-      description: 'Initial card number value',
+      description: 'The current card number value (digits only, no spaces). Managed by Pega via `getPConnect`.',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    testId: {
+      control: 'text',
+      description: 'Value applied to the `data-testid` attribute for automated testing.',
+      table: {
+        type: { summary: 'string' },
+        category: 'Testing',
+      },
     },
   },
 };
@@ -48,6 +102,23 @@ const sampleCards = {
 };
 
 export const Default: Story = {
+  name: 'Default (Empty)',
+  parameters: {
+    docs: {
+      description: {
+        story: 'The component in its initial empty state. Start typing a card number to see real-time type detection, formatting, and Luhn validation in action.',
+      },
+      source: {
+        code: `<PegaFieldCreditcard
+  getPConnect={getPConnect}
+  label="Credit Card Number"
+  placeholder="Enter credit card number"
+  showCardLogo={true}
+  formatNumber={true}
+/>`,
+      },
+    },
+  },
   args: {
     label: 'Credit Card Number',
     placeholder: 'Enter credit card number',
@@ -76,6 +147,23 @@ export const Default: Story = {
 };
 
 export const WithVisaCard: Story = {
+  name: 'Visa',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pre-filled with a valid Visa test number. The Visa logo appears immediately and the 4-4-4-4 grouping is applied. The green border confirms the Luhn check passes.',
+      },
+      source: {
+        code: `<PegaFieldCreditcard
+  getPConnect={getPConnect}
+  label="Visa Card Example"
+  showCardLogo={true}
+  formatNumber={true}
+  value="4532015112830366"
+/>`,
+      },
+    },
+  },
   args: {
     label: 'Visa Card Example',
     placeholder: 'Visa test card',
@@ -104,6 +192,23 @@ export const WithVisaCard: Story = {
 };
 
 export const WithMastercard: Story = {
+  name: 'Mastercard',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pre-filled with a valid Mastercard test number. Shows the Mastercard logo and standard 4-4-4-4 grouping.',
+      },
+      source: {
+        code: `<PegaFieldCreditcard
+  getPConnect={getPConnect}
+  label="Mastercard Example"
+  showCardLogo={true}
+  formatNumber={true}
+  value="5555555555554444"
+/>`,
+      },
+    },
+  },
   args: {
     label: 'Mastercard Example',
     placeholder: 'Mastercard test card',
@@ -132,6 +237,23 @@ export const WithMastercard: Story = {
 };
 
 export const WithAmericanExpress: Story = {
+  name: 'American Express',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pre-filled with a valid Amex test number. Note the distinct **4-6-5** digit grouping (`3782 822463 10005`) and the Amex logo — both are applied automatically when the `37` prefix is detected.',
+      },
+      source: {
+        code: `<PegaFieldCreditcard
+  getPConnect={getPConnect}
+  label="American Express Example"
+  showCardLogo={true}
+  formatNumber={true}
+  value="378282246310005"
+/>`,
+      },
+    },
+  },
   args: {
     label: 'American Express Example',
     placeholder: 'AmEx test card',
@@ -160,10 +282,27 @@ export const WithAmericanExpress: Story = {
 };
 
 export const LogoTest: Story = {
+  name: 'Logo display',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates that the card logo renders as soon as a recognisable prefix is entered — no need to complete the full number. Toggle `showCardLogo` in the controls panel to hide the logo.',
+      },
+      source: {
+        code: `<PegaFieldCreditcard
+  getPConnect={getPConnect}
+  label="Credit Card Number"
+  showCardLogo={true}
+  formatNumber={true}
+  value="4111111111111111"
+/>`,
+      },
+    },
+  },
   args: {
-    label: 'Logo Test',
-    placeholder: 'Should show Visa logo',
-    showCardLogo: true,
+    label: 'Hidden Logo',
+    placeholder: 'Should not show a logo',
+    showCardLogo: false,
     formatNumber: true,
     testId: 'logo-test',
   },

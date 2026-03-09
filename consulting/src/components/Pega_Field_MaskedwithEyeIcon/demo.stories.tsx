@@ -12,32 +12,81 @@ const meta: Meta<typeof PegaFieldMaskedwithEyeIcon> = {
   excludeStories: /.*Data$/,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+**Masked Input** is a text input field with a toggleable eye icon that allows the user to show or hide the entered value. By default the value is obscured, and clicking the eye icon in the input reveals or re-masks it on demand.
+
+### Business use case
+This component is used to check the value entered by the user in sensitive fields. It is particularly useful when the value needs to remain hidden during entry — such as a password, PIN, or secret key — but the user still needs the ability to verify what they typed. Clicking the eye icon toggles the mask on and off without leaving the field, so the user can confirm their input at any point without retyping it.
+
+### Why a custom component?
+The component is required because we want to mask sensitive data while still giving the user the ability to cross-check what was entered. A standard Pega text field offers no built-in mask toggle — it is either always visible or always hidden. This component closes that gap by combining a standard editable input with an inline eye icon button, keeping sensitive values protected by default while remaining fully verifiable by the user at their discretion.
+
+### Behaviour
+- The field starts masked (\`defaultMasked={true}\`) or unmasked (\`defaultMasked={false}\`) depending on configuration.
+- The eye icon in the trailing position of the input toggles the mask state.
+- The icon switches between an open eye (value visible) and a crossed-out eye (value hidden) to reflect the current state.
+- All standard field states are supported: \`disabled\`, \`readOnly\`, and \`required\`.
+        `.trim(),
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
     label: {
       control: 'text',
-      description: 'Label for the input field',
+      description: 'Label displayed above the input field.',
+      table: {
+        type: { summary: 'string' },
+      },
     },
     placeholder: {
       control: 'text',
-      description: 'Placeholder text for the input field',
+      description: 'Placeholder text shown inside the input when it is empty.',
+      table: {
+        type: { summary: 'string' },
+      },
     },
     defaultMasked: {
       control: 'boolean',
-      description: 'Whether the input is masked by default',
+      description: 'When `true` (default), the field value is hidden on initial render. The user can reveal it by clicking the eye icon.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether the input is disabled',
+      description: 'When `true`, the input is non-interactive and visually dimmed. The eye icon is also disabled.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
     },
     readOnly: {
       control: 'boolean',
-      description: 'Whether the input is read-only',
+      description: 'When `true`, the value is displayed but cannot be edited. The eye icon remains active so the user can still toggle the mask.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
     },
     required: {
       control: 'boolean',
-      description: 'Whether the input is required',
+      description: 'When `true`, marks the field as required and triggers validation if left empty on form submit.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    testId: {
+      control: 'text',
+      description: 'Value applied to the `data-testid` attribute for automated testing.',
+      table: {
+        type: { summary: 'string' },
+        category: 'Testing',
+      },
     },
   },
 };
@@ -46,6 +95,22 @@ export default meta;
 type Story = StoryObj<typeof PegaFieldMaskedwithEyeIcon>;
 
 export const Default: Story = {
+  name: 'Default (Masked)',
+  parameters: {
+    docs: {
+      description: {
+        story: 'The field in its default state — value is pre-filled and masked. Click the eye icon to reveal the entered text, then click again to re-mask it.',
+      },
+      source: {
+        code: `<PegaFieldMaskedwithEyeIcon
+  getPConnect={getPConnect}
+  label="Password"
+  placeholder="Enter value"
+  defaultMasked={true}
+/>`,
+      },
+    },
+  },
   args: {
     label: configProps.label,
     placeholder: configProps.placeholder,
@@ -77,6 +142,22 @@ export const Default: Story = {
 };
 
 export const Unmasked: Story = {
+  name: 'Unmasked by default',
+  parameters: {
+    docs: {
+      description: {
+        story: 'When `defaultMasked={false}`, the value is visible on load. The eye icon is still present so the user can mask it if needed.',
+      },
+      source: {
+        code: `<PegaFieldMaskedwithEyeIcon
+  getPConnect={getPConnect}
+  label="Visible Input"
+  placeholder="Text is visible"
+  defaultMasked={false}
+/>`,
+      },
+    },
+  },
   args: {
     label: 'Visible Input',
     placeholder: 'Text is visible',
@@ -108,6 +189,22 @@ export const Unmasked: Story = {
 };
 
 export const Disabled: Story = {
+  name: 'Disabled',
+  parameters: {
+    docs: {
+      description: {
+        story: 'When `disabled={true}`, the field and eye icon are both non-interactive. Use this state when the field should be visible but not editable, for example when a prior step has not been completed.',
+      },
+      source: {
+        code: `<PegaFieldMaskedwithEyeIcon
+  getPConnect={getPConnect}
+  label="Disabled Input"
+  defaultMasked={true}
+  disabled={true}
+/>`,
+      },
+    },
+  },
   args: {
     label: 'Disabled Input',
     placeholder: 'Cannot interact',
@@ -139,6 +236,22 @@ export const Disabled: Story = {
 };
 
 export const ReadOnly: Story = {
+  name: 'Read-only',
+  parameters: {
+    docs: {
+      description: {
+        story: 'When `readOnly={true}`, the value cannot be edited but the eye icon remains active. This is useful for review screens where sensitive data should be displayed on demand but not modified.',
+      },
+      source: {
+        code: `<PegaFieldMaskedwithEyeIcon
+  getPConnect={getPConnect}
+  label="Read-Only Input"
+  defaultMasked={true}
+  readOnly={true}
+/>`,
+      },
+    },
+  },
   args: {
     label: 'Read-Only Input',
     placeholder: '',
