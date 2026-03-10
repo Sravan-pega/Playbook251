@@ -3,18 +3,18 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { configProps } from './mock';
 
-import PegaFieldContextualAlert from './index';
+import PegaFieldContextualMessage from './index';
 
-const meta: Meta<typeof PegaFieldContextualAlert> = {
-  title: 'Pega/Field/Contextual Alert',
-  component: PegaFieldContextualAlert,
+const meta: Meta<typeof PegaFieldContextualMessage> = {
+  title: 'Pega/Field/Contextual Message',
+  component: PegaFieldContextualMessage,
   excludeStories: /.*Data$/,
   parameters: {
     layout: 'centered',
     docs: {
       description: {
         component: `
-**Contextual Alert** displays an inline, role-based notification banner inside a Pega Constellation form or page.
+**Contextual Message** displays an inline, role-based notification banner inside a Pega Constellation form or page.
 
 It supports four severity levels — each with a distinct icon, color, and semantic meaning — and accepts either plain text or sanitized HTML as its message body.
 
@@ -82,10 +82,10 @@ The alert container has \`role="alert"\` and \`aria-live="polite"\` so screen re
 };
 
 export default meta;
-type Story = StoryObj<typeof PegaFieldContextualAlert>;
+type Story = StoryObj<typeof PegaFieldContextualMessage>;
 
 const basePConnect = () => ({
-  getStateProps: () => ({ value: '.ContextualAlert', hasSuggestions: false }),
+  getStateProps: () => ({ value: '.ContextualMessage', hasSuggestions: false }),
   getActionsApi: () => ({
     updateFieldValue: () => {/* nothing */},
     triggerFieldChange: () => {/* nothing */}
@@ -104,7 +104,7 @@ export const Default: Story = {
         story: 'The default state using the `info` type. A good starting point when you need a neutral, non-urgent message.',
       },
       source: {
-        code: `<PegaFieldContextualAlert
+        code: `<PegaFieldContextualMessage
   getPConnect={getPConnect}
   type="info"
   title="Information"
@@ -120,7 +120,7 @@ export const Default: Story = {
     testId: configProps.testId,
   },
   render: (args: any) => (
-    <PegaFieldContextualAlert getPConnect={basePConnect} {...args} />
+    <PegaFieldContextualMessage getPConnect={basePConnect} {...args} />
   )
 };
 
@@ -132,7 +132,7 @@ export const Urgent: Story = {
         story: 'Use `urgent` for errors or actions that block the user. The red icon and color draw immediate attention.',
       },
       source: {
-        code: `<PegaFieldContextualAlert
+        code: `<PegaFieldContextualMessage
   getPConnect={getPConnect}
   type="urgent"
   title="Action Required"
@@ -148,7 +148,7 @@ export const Urgent: Story = {
     testId: 'alert-urgent',
   },
   render: (args: any) => (
-    <PegaFieldContextualAlert getPConnect={basePConnect} {...args} />
+    <PegaFieldContextualMessage getPConnect={basePConnect} {...args} />
   )
 };
 
@@ -160,7 +160,7 @@ export const Info: Story = {
         story: 'Use `info` for neutral tips, guidance, or background context that does not require action.',
       },
       source: {
-        code: `<PegaFieldContextualAlert
+        code: `<PegaFieldContextualMessage
   getPConnect={getPConnect}
   type="info"
   title="Did You Know?"
@@ -176,7 +176,7 @@ export const Info: Story = {
     testId: 'alert-info',
   },
   render: (args: any) => (
-    <PegaFieldContextualAlert getPConnect={basePConnect} {...args} />
+    <PegaFieldContextualMessage getPConnect={basePConnect} {...args} />
   )
 };
 
@@ -188,7 +188,7 @@ export const Warning: Story = {
         story: 'Use `warning` for non-blocking cautions — the user can proceed but should be aware of a potential issue.',
       },
       source: {
-        code: `<PegaFieldContextualAlert
+        code: `<PegaFieldContextualMessage
   getPConnect={getPConnect}
   type="warning"
   title="Please Note"
@@ -204,7 +204,7 @@ export const Warning: Story = {
     testId: 'alert-warning',
   },
   render: (args: any) => (
-    <PegaFieldContextualAlert getPConnect={basePConnect} {...args} />
+    <PegaFieldContextualMessage getPConnect={basePConnect} {...args} />
   )
 };
 
@@ -216,7 +216,7 @@ export const Success: Story = {
         story: 'Use `success` to confirm a completed action. Display this after a form submission or save operation.',
       },
       source: {
-        code: `<PegaFieldContextualAlert
+        code: `<PegaFieldContextualMessage
   getPConnect={getPConnect}
   type="success"
   title="All Done!"
@@ -232,7 +232,7 @@ export const Success: Story = {
     testId: 'alert-success',
   },
   render: (args: any) => (
-    <PegaFieldContextualAlert getPConnect={basePConnect} {...args} />
+    <PegaFieldContextualMessage getPConnect={basePConnect} {...args} />
   )
 };
 
@@ -245,7 +245,7 @@ export const WithHtmlMessage: Story = {
 \`<script>\` tags and inline event handlers are stripped automatically before rendering.`,
       },
       source: {
-        code: `<PegaFieldContextualAlert
+        code: `<PegaFieldContextualMessage
   getPConnect={getPConnect}
   type="info"
   title="Rich Content"
@@ -261,6 +261,6 @@ export const WithHtmlMessage: Story = {
     testId: 'alert-html',
   },
   render: (args: any) => (
-    <PegaFieldContextualAlert getPConnect={basePConnect} {...args} />
+    <PegaFieldContextualMessage getPConnect={basePConnect} {...args} />
   )
 };

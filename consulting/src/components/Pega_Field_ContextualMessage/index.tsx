@@ -2,13 +2,13 @@
 import { withConfiguration } from '@pega/cosmos-react-core';
 import type { PConnFieldProps } from '../shared/PConnProps';
 import '../shared/create-nonce';
-import StyledPegaFieldContextualAlertWrapper from './styles';
+import StyledPegaFieldContextualMessageWrapper from './styles';
 
 // Alert type definitions
 type AlertType = 'urgent' | 'info' | 'warning' | 'success';
 
 // interface for props
-interface PegaFieldContextualAlertProps extends PConnFieldProps {
+interface PegaFieldContextualMessageProps extends PConnFieldProps {
   /**
    * Controls the visual style, icon, and color scheme of the alert.
    *
@@ -96,7 +96,7 @@ const sanitizeHtml = (html: string): string => {
 };
 
 // Main Contextual Alert component
-function PegaFieldContextualAlert(props: PegaFieldContextualAlertProps) {
+function PegaFieldContextualMessage(props: PegaFieldContextualMessageProps) {
   const {
     type = 'info' as AlertType,
     title = 'Alert',
@@ -130,7 +130,7 @@ function PegaFieldContextualAlert(props: PegaFieldContextualAlertProps) {
   };
 
   return (
-    <StyledPegaFieldContextualAlertWrapper data-testid={testId}>
+    <StyledPegaFieldContextualMessageWrapper data-testid={testId}>
       <div className={`contextual-alert ${config.className}`} role="alert" aria-live="polite">
         <div className="alert-header">
           <div className="alert-icon">
@@ -146,8 +146,8 @@ function PegaFieldContextualAlert(props: PegaFieldContextualAlertProps) {
           </div>
         )}
       </div>
-    </StyledPegaFieldContextualAlertWrapper>
+    </StyledPegaFieldContextualMessageWrapper>
   );
 }
 
-export default withConfiguration(PegaFieldContextualAlert);
+export default withConfiguration(PegaFieldContextualMessage);
