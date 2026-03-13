@@ -112,8 +112,6 @@ const meta: Meta<typeof PegaFieldAdditionalDetails> = {
     docs: {
       description: {
         component: `
-## Additional Details
-
 The **Additional Details** component is a **Field-type** component that renders a single compact button. It is designed to be placed inside a table row's **Actions** column. When clicked it fires a lazy data page call using the current row's context as parameters, then presents the response in a modal overlay — no data is loaded until the user explicitly asks for it.
 
 ---
